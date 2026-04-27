@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuild
 const fs = require('fs');
 
 const TOKEN = process.env.TOKEN;
+console.log("TOKEN EXISTS:", !!process.env.TOKEN);
 const CLIENT_ID = "1485144103040843888";
 
 const client = new Client({
