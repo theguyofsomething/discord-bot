@@ -41,7 +41,7 @@ function getUser(id) {
       level: 1,
       inventory: {},
       rod: "basic",
-      bait: "worm",,
+      bait: "worm",
       cars: [],
       aircraft: [],
       cooldowns: {}
