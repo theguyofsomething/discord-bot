@@ -205,9 +205,46 @@ client.on("interactionCreate", async (i) => {
   }
 
   // fishing
-  if (i.commandName === "fish") {
-    let cd = cooldown(user, "fish", 5000);
-    if (cd) return i.reply(`Wait ${cd}s`);
+if (i.commandName === "fish") {
+  let cd = cooldown(user, "fish", 5000);
+  if (cd) return i.reply(`Wait ${cd}s`);
+
+  // 🎬 ANIMATION START (PUT IT HERE)
+  await i.reply("🎣 Casting line...");
+
+  await new Promise(r => setTimeout(r, 1200));
+  await i.editReply("🌊 Something is biting...");
+
+  await new Promise(r => setTimeout(r, 1200));
+  await i.editReply("⚡ REEL IT IN!");
+
+  await new Promise(r => setTimeout(r, 800));
+  // 🎬 ANIMATION END
+
+  // 🎣 NOW roll fish AFTER animation
+  let fish = rollFish(user);
+
+  user.money += fish.value;
+  user.inventory[fish.name] = (user.inventory[fish.name] || 0) + 1;
+
+  addXP(user, 20);
+  saveData();
+
+  let rarityColor = colors[fish.rarity.toLowerCase()] || 0xffffff;
+
+  const embed = new EmbedBuilder()
+    .setTitle("🎣 You caught something!")
+    .setDescription(`**${fish.name}**`)
+    .addFields(
+      { name: "💰 Value", value: `${fish.value}`, inline: true },
+      { name: "⭐ Rarity", value: fish.rarity, inline: true }
+    )
+    .setColor(rarityColor)
+    .setImage(fish.img);
+
+  // 🎉 FINAL RESULT
+  await i.editReply({ content: "", embeds: [embed] });
+}
 
     let fish = rollFish(user);
     user.money += fish.value;
