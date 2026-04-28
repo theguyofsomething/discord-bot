@@ -83,17 +83,17 @@ const locations = {
 };
 
 function rollFish(user) {
-let rod = rods[user.rod || "basic"];
-let bait = baitTypes[user.bait || "worm"];
+  let rod = rods[user.rod || "basic"];
+  let bait = baitTypes[user.bait || "worm"];
 
-let luck = rod.luck + (bait?.luck || 0);
+  let luck = rod.luck + (bait?.luck || 0);
 
-let area = locations[user.location || "lake"];
+  let area = locations[user.location || "lake"];
 
   let table = area.map(f => ({
     ...f,
-chance: f.chance * Math.pow(1.2, luck - 1)
-}));
+    chance: f.chance * Math.pow(1.2, luck - 1)
+  }));
 
   let total = table.reduce((a, b) => a + b.chance, 0);
   let rand = Math.random() * total;
@@ -103,9 +103,8 @@ chance: f.chance * Math.pow(1.2, luck - 1)
     sum += fish.chance;
     if (rand <= sum) return fish;
   }
-}
 
- return table[0];
+  return table[0];
 }
 // ================= LEVEL =================
 function addXP(user, amt) {
