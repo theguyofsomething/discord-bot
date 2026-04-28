@@ -5,13 +5,29 @@ const TOKEN = process.env.TOKEN;
 console.log("TOKEN EXISTS:", !!process.env.TOKEN);
 const CLIENT_ID = "1485144103040843888";
 
+const TOKEN = "PASTE_NEW_TOKEN_HERE";
+client.login(TOKEN);
+
 const client = new Client({
   intents: [GatewayIntentBits.Guilds]
 });
 
-console.log("BOT STARTING...");
+// 🎨 UI COLORS
+const colors = {
+  common: 0x95a5a6,
+  uncommon: 0x2ecc71,
+  rare: 0x3498db,
+  legendary: 0xf1c40f
+};
+
+// 🧠 DEBUG LOGGER
+function log(msg) {
+  console.log("[BOT]", msg);
+}
 
 // ================= DATA =================
+const fs = require("fs");
+
 let data = {};
 if (fs.existsSync("data.json")) {
   data = JSON.parse(fs.readFileSync("data.json"));
@@ -19,6 +35,7 @@ if (fs.existsSync("data.json")) {
 
 function saveData() {
   fs.writeFileSync("data.json", JSON.stringify(data, null, 2));
+JSON.stringify(data, null, 2));
 }
 
 function getUser(id) {
@@ -72,13 +89,16 @@ const locations = {
 };
 
 function rollFish(user) {
-  let rod = rods[user.rods[user.rods.length - 1]];
-  let luck = rod.luck;
+let rod = rods[user.rod || "basic"];
+let bait = baitTypes[user.bait || "worm"];
 
-  let table = locations.lake.map(f => ({
+let luck = rod.luck + (bait?.luck || 0);
+
+let area = locations[user.location || "lake"];
+
+  let table = area.map(f => ({
     ...f,
-    chance: f.chance * luck
-  }));
+chance: f.chance * Math.pow(1.2, luck - 1)
 
   let total = table.reduce((a, b) => a + b.chance, 0);
   let rand = Math.random() * total;
@@ -90,6 +110,7 @@ function rollFish(user) {
   }
 }
 
+return table[0];
 // ================= LEVEL =================
 function addXP(user, amt) {
   user.exp += amt;
