@@ -41,7 +41,7 @@ function getUser(id) {
       level: 1,
       inventory: {},
       rod: "basic",
-      bait: {},
+      bait: "worm",,
       cars: [],
       aircraft: [],
       cooldowns: {}
@@ -245,19 +245,6 @@ if (i.commandName === "fish") {
   // 🎉 FINAL RESULT
   await i.editReply({ content: "", embeds: [embed] });
 }
-
-    let fish = rollFish(user);
-    user.money += fish.value;
-    user.inventory[fish.name] = (user.inventory[fish.name] || 0) + 1;
-
-    addXP(user, 20);
-    saveData();
-
-    return i.reply({
-      content: `🎣 ${fish.name} (${fish.rarity}) +${fish.value}`,
-      embeds: [new EmbedBuilder().setImage(fish.img)]
-    });
-  }
 
   // carshop
   if (i.commandName === "carshop") {
