@@ -75,7 +75,6 @@ const baitTypes = {
 };
 
 const locations = {
-const locations = {
   lake: [
     { name: "Minnow", rarity: "Common", chance: 50, value: 50, img: "https://static.wikia.nocookie.net/fisch/images/4/40/Minnow_Bait_Render.png/revision/latest?cb=20250224011628" },
     { name: "Salmon", rarity: "Uncommon", chance: 30, value: 120, img: "https://static.wikitide.net/fischwiki/6/69/Chinook_Salmon.png" },
