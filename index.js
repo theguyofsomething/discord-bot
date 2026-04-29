@@ -78,17 +78,17 @@ const locations = {
   lake: [
     { name: "Minnow", rarity: "Common", chance: 50, value: 50, img: "https://static.wikia.nocookie.net/fisch/images/4/40/Minnow_Bait_Render.png/revision/latest?cb=20250224011628" },
     { name: "Salmon", rarity: "Uncommon", chance: 30, value: 120, img: "https://static.wikitide.net/fischwiki/6/69/Chinook_Salmon.png" },
-    { name: "Tuna", rarity: "Rare", chance: 15, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png"},
+    { name: "Tuna", rarity: "Rare", chance: 15, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png" },
     { name: "Seraphine", rarity: "Mythic", chance: 5, value: 10000, img: "https://static.wikia.nocookie.net/fisch/images/e/e1/Seraphfin.png/revision/latest?cb=20260113053800" }
-  ]
-};
+  ],
 
-ocean: [
+  ocean: [
     { name: "Tuna", rarity: "Rare", chance: 60, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png" },
-    { name: "Shark", rarity: "Legendary", chance: 20, value: 2000, img: "https://static.wikitide.net/fischwiki/1/1b/Ginsu_Shark.png?version=34b1a2dbea07d681631e382376ab4d1e" },   
+    { name: "Shark", rarity: "Legendary", chance: 20, value: 2000, img: "https://static.wikitide.net/fischwiki/1/1b/Ginsu_Shark.png?version=34b1a2dbea07d681631e382376ab4d1e" },
     { name: "Marlin", rarity: "Legendary", chance: 40, value: 1200, img: "https://static.wikitide.net/fischwiki/e/e9/Massive_Marlin.png?version=3e6f43beb04c1b4b2ebae906baae64ff" }
   ]
 };
+
 function rollFish(user) {
   let rod = rods[user.rod || "basic"];
   let bait = baitTypes[user.bait || "worm"];
