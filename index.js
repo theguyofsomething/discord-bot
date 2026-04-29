@@ -14,8 +14,8 @@ const colors = {
   common: 0x95a5a6,
   uncommon: 0x2ecc71,
   rare: 0x3498db,
-  legendary: 0xf1c40f
-  mythical: 0xff69b4
+  legendary: 0xf1c40f,
+  mythic: 0xff69b4
 };
 
 // 🧠 DEBUG LOGGER
@@ -79,7 +79,7 @@ const locations = {
     { name: "Minnow", rarity: "Common", chance: 50, value: 50, img: "https://static.wikia.nocookie.net/fisch/images/4/40/Minnow_Bait_Render.png/revision/latest?cb=20250224011628" },
     { name: "Salmon", rarity: "Uncommon", chance: 30, value: 120, img: "https://static.wikitide.net/fischwiki/6/69/Chinook_Salmon.png" },
     { name: "Tuna", rarity: "Rare", chance: 15, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png"},
-    { name: "Seraphine", rarity: "Mythical", chance: 5, value: 10000, img: "https://static.wikia.nocookie.net/fisch/images/e/e1/Seraphfin.png/revision/latest?cb=20260113053800" }
+    { name: "Seraphine", rarity: "Mythic", chance: 5, value: 10000, img: "https://static.wikia.nocookie.net/fisch/images/e/e1/Seraphfin.png/revision/latest?cb=20260113053800" }
   ]
 };
 
