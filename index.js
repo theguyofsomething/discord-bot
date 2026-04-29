@@ -81,6 +81,7 @@ const locations = {
     { name: "Tuna", rarity: "Rare", chance: 15, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png" },
     { name: "Seraphine", rarity: "Mythic", chance: 5, value: 10000, img: "https://static.wikia.nocookie.net/fisch/images/e/e1/Seraphfin.png/revision/latest?cb=20260113053800" }
   ],
+};
 
   ocean: [
     { name: "Tuna", rarity: "Rare", chance: 60, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png" },
