@@ -163,6 +163,8 @@ new SlashCommandBuilder().setName("buyboat")
      .setDescription("Where to go")
      .setRequired(true)
   ),
+
+  ].map(c => c.toJSON());
 // register
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 (async () => {
@@ -306,5 +308,8 @@ XP: ${user.exp}
 🌊 Location: ${user.location}
 🚤 Boat: ${user.boat}`
 );
+}
 
+
+}); // closes interactionCreate
 client.login(TOKEN);
