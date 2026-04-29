@@ -15,6 +15,7 @@ const colors = {
   uncommon: 0x2ecc71,
   rare: 0x3498db,
   legendary: 0xf1c40f
+  mythical: 0xff69b4 // 💖 pink
 };
 
 // 🧠 DEBUG LOGGER
@@ -42,8 +43,8 @@ function getUser(id) {
       inventory: {},
       rod: "basic",
       bait: "worm",
-      cars: [],
-      aircraft: [],
+      location: "lake",
+      boat: "none",
       cooldowns: {}
     };
   }
@@ -78,10 +79,16 @@ const locations = {
     { name: "Minnow", rarity: "Common", chance: 50, value: 50, img: "https://static.wikia.nocookie.net/fisch/images/4/40/Minnow_Bait_Render.png/revision/latest?cb=20250224011628" },
     { name: "Salmon", rarity: "Uncommon", chance: 30, value: 120, img: "https://static.wikitide.net/fischwiki/6/69/Chinook_Salmon.png" },
     { name: "Tuna", rarity: "Rare", chance: 15, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png"},
-    { name: "Seraphine", rarity: "Legendary", chance: 5, value: 1000, img: "https://static.wikia.nocookie.net/fisch/images/e/e1/Seraphfin.png/revision/latest?cb=20260113053800" }
+    { name: "Seraphine", rarity: "Mythical", chance: 5, value: 10000, img: "https://static.wikia.nocookie.net/fisch/images/e/e1/Seraphfin.png/revision/latest?cb=20260113053800" }
   ]
 };
 
+ocean: [
+    { name: "Tuna", rarity: "Rare", chance: 60, value: 300, img: "https://static.wikitide.net/fischwiki/thumb/0/0f/Bluefin_Tuna_School.png/250px-Bluefin_Tuna_School.png" },
+    { name: "Shark" rarity: "Legendary" , chance: 20, value: 2000, img: "https://static.wikitide.net/fischwiki/1/1b/Ginsu_Shark.png?version=34b1a2dbea07d681631e382376ab4d1e" },   
+    { name: "Marlin", rarity: "Legendary", chance: 40, value: 1200, img: "https://static.wikitide.net/fischwiki/e/e9/Massive_Marlin.png?version=3e6f43beb04c1b4b2ebae906baae64ff" }
+  ]
+};
 function rollFish(user) {
   let rod = rods[user.rod || "basic"];
   let bait = baitTypes[user.bait || "worm"];
@@ -120,16 +127,10 @@ function addXP(user, amt) {
 }
 
 // ================= SHOPS =================
-const carShop = {
-  sedan: { price: 2000 },
-  sports: { price: 5000 }
+const boatShop = {
+  raft: { price: 500, unlock: "lake" },
+  fishingboat: { price: 2000, unlock: "ocean" }
 };
-
-const aircraftShop = {
-  glider: { price: 3000 },
-  jet: { price: 10000 }
-};
-
 // ================= COMMANDS =================
 const commands = [
   new SlashCommandBuilder().setName("ping").setDescription("Ping"),
@@ -143,18 +144,25 @@ const commands = [
   new SlashCommandBuilder().setName("profile").setDescription("Your profile"),
 
   new SlashCommandBuilder().setName("fish").setDescription("Go fishing"),
+ 
+new SlashCommandBuilder().setName("boatshop").setDescription("View boats"),
 
-  new SlashCommandBuilder().setName("carshop").setDescription("View cars"),
-  new SlashCommandBuilder().setName("buycar")
-    .setDescription("Buy car")
-    .addStringOption(o => o.setName("car").setDescription("Car name").setRequired(true)),
-
-  new SlashCommandBuilder().setName("aircraftshop").setDescription("View aircraft"),
-  new SlashCommandBuilder().setName("buyaircraft")
-    .setDescription("Buy aircraft")
-    .addStringOption(o => o.setName("aircraft").setDescription("Aircraft name").setRequired(true))
-].map(c => c.toJSON());
-
+new SlashCommandBuilder().setName("buyboat")
+  .setDescription("Buy a boat")
+  .addStringOption(o =>
+    o.setName("boat")
+     .setDescription("Boat name")
+     .setRequired(true)
+  ),
+  
+  new SlashCommandBuilder()
+  .setName("travel")
+  .setDescription("Travel to a location")
+  .addStringOption(o =>
+    o.setName("place")
+     .setDescription("Where to go")
+     .setRequired(true)
+  ),
 // register
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 (async () => {
@@ -246,58 +254,57 @@ if (i.commandName === "fish") {
   await i.editReply({ content: "", embeds: [embed] });
 }
 
-  // carshop
-  if (i.commandName === "carshop") {
-    let txt = Object.entries(carShop)
-      .map(([n, v]) => `${n} — ${v.price}`)
-      .join("\n");
-    return i.reply("🚗\n" + txt);
+if (i.commandName === "boatshop") {
+  let txt = Object.entries(boatShop)
+    .map(([n, v]) => `${n} — ${v.price}`)
+    .join("\n");
+
+  return i.reply("🚤 Boat Shop\n" + txt);
+}
+
+if (i.commandName === "buyboat") {
+  let name = i.options.getString("boat");
+  let boat = boatShop[name];
+
+  if (!boat) return i.reply("Invalid boat");
+  if (user.money < boat.price) return i.reply("Not enough money");
+
+  user.money -= boat.price;
+  user.boat = name;
+  saveData();
+
+  return i.reply(`🚤 You bought a ${name}`);
+}
+
+if (i.commandName === "travel") {
+  let place = i.options.getString("place");
+
+  if (!locations[place]) {
+    return i.reply("Invalid location");
   }
 
-  if (i.commandName === "buycar") {
-    let name = i.options.getString("car");
-    let car = carShop[name];
+  let boat = boatShop[user.boat];
 
-    if (!car) return i.reply("Invalid");
-    if (user.money < car.price) return i.reply("No money");
-
-    user.money -= car.price;
-    user.cars.push(name);
-    saveData();
-
-    return i.reply(`Bought ${name}`);
+  if (!boat || boat.unlock !== place) {
+    return i.reply("🚫 You need a better boat to go there!");
   }
 
-  // aircraft
-  if (i.commandName === "aircraftshop") {
-    let txt = Object.entries(aircraftShop)
-      .map(([n, v]) => `${n} — ${v.price}`)
-      .join("\n");
-    return i.reply("✈️\n" + txt);
-  }
+  user.location = place;
+  saveData();
 
-  if (i.commandName === "buyaircraft") {
-    let name = i.options.getString("aircraft");
-    let a = aircraftShop[name];
-
-    if (!a) return i.reply("Invalid");
-    if (user.money < a.price) return i.reply("No money");
-
-    user.money -= a.price;
-    user.aircraft.push(name);
-    saveData();
-
-    return i.reply(`Bought ${name}`);
-  }
-
+  return i.reply(`🌊 You traveled to ${place}`);
+}
   // profile
   if (i.commandName === "profile") {
     let perk = user.level >= 10 ? "Lucky Fisher" : "None";
 
     return i.reply(
-      `Level: ${user.level}\nXP: ${user.exp}\nMoney: ${user.money}\nPerk: ${perk}`
-    );
-  }
-});
+  `👤 Profile
+Level: ${user.level}
+XP: ${user.exp}
+💰 Money: ${user.money}
+🌊 Location: ${user.location}
+🚤 Boat: ${user.boat}`
+);
 
 client.login(TOKEN);
